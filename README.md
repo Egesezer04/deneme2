@@ -149,8 +149,9 @@ python app.py
 
 ## 🎥 Demo
 
-[Video3(full code)](videos/video3.mp4)
-[Video4(app.py)](videos/video4.mp4)
+[Video 3 indir(full code)](https://github.com/Egesezer04/deneme2/raw/main/videos/video3.mp4)
+[Video 4 indir(app.py)](https://github.com/Egesezer04/deneme2/raw/main/videos/video4.mp4)
+
 
 
 
