@@ -44,14 +44,14 @@ A modern Python application that scrapes listing data (books, products, real est
 - Background scraping using a worker thread
 - Completely responsive GUI (no freezing)
 
-## 🧱 Project Architecture Overview
-/project
-│── app.py # Main Tkinter GUI application
-│── models.py # BaseModel & Listing
-│── scorer.py # Scoring interface + QualityScorer
-│── scraper.py # Selenium + BeautifulSoup scraper logic
-│── database.py # SQLite operations
-│── README.md # This file
+🏗️ Project Architecture Overview
+/ project
+│── app.py               # Main Tkinter App
+│── scraper.py           # Selenium + BS4 logic
+│── models.py            # BaseModel & Listing
+│── scorer.py            # AbstractScorer & QualityScorer
+│── database.py          # SQLite handler
+│── README.md            # This file
 
 
 **Main Components**
@@ -78,14 +78,13 @@ A modern Python application that scrapes listing data (books, products, real est
 ## 🛠 Installation
 
 ### 1️⃣ Install dependencies
-```bash
 pip install selenium bs4 webdriver-manager
 
 2️⃣ Run the project
 python app.py
 
 3️⃣ GUI usage
-Enter a URL → click Let’s Go → results instantly appear.
+Enter a URL → click Let’s Go 
 
 ##🌐 Scraping Workflow
 
@@ -104,6 +103,7 @@ Enter a URL → click Let’s Go → results instantly appear.
 7.Results are:
 
   •Saved to SQLite (listings.db)
+
   •Displayed in the GUI table
 
 ##🖥️ How to Use the GUI
@@ -117,8 +117,11 @@ Enter a URL → click Let’s Go → results instantly appear.
 4.The table displays:
 
   •Title
+
   •Price
+
   •Image count
+  
   •Score
 
 5.Errors and logs appear in the red status area
