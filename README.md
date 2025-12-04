@@ -77,13 +77,14 @@ A modern Python application that scrapes listing data (books, products, real est
 
 ## 🛠 Installation
 
-### 1️⃣ Install dependencies
+## 1️⃣ Install dependencies
+
 pip install selenium bs4 webdriver-manager
 
-2️⃣ Run the project
+##2️⃣ Run the project
 python app.py
 
-3️⃣ GUI usage
+##3️⃣ GUI usage
 Enter a URL → click Let’s Go 
 
 ##🌐 Scraping Workflow
@@ -121,7 +122,7 @@ Enter a URL → click Let’s Go
   •Price
 
   •Image count
-  
+
   •Score
 
 5.Errors and logs appear in the red status area
