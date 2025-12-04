@@ -1,80 +1,79 @@
 📚 Listing Quality Scoring System
 
-A modern Python application that scrapes listing data (books, products, real‑estate‑like card layouts), analyzes listing quality, stores results in SQLite, and displays everything in a clean Tkinter GUI.
+A modern Python application that scrapes listing data (books, products, real estate like card layouts), analyzes listing quality, stores results in SQLite, and displays everything in a clean Tkinter GUI.
 
 Bu proje Selenium + BeautifulSoup + SQLite + OOP + Tkinter + Threading ile tam bir “modern Python uygulaması” örneğidir.
 
 🚀 Features
 ✅ Web Scraping
 
-Dynamic page loading using Selenium WebDriver
+•Dynamic page loading using Selenium WebDriver
 
-HTML extraction through BeautifulSoup
+•HTML extraction through BeautifulSoup
 
-Automatically parses the first 10 product listings
+•Automatically parses the first 10 product listings
 
-Built‑in retry mechanism (up to 3 attempts)
+•Built in retry mechanism (up to 3 attempts)
 
-Threading support → GUI freezes never happen
+•Threading support → GUI freezes never happen
 
-Automatic ChromeDriver installation via webdriver-manager
+•Automatic ChromeDriver installation via webdriver-manager
 
-✅ Object‑Oriented Business Logic
+✅ Object Oriented Business Logic
+
 Models
 
-BaseModel – Shared base with unique ID
+•BaseModel – Shared base with unique ID
 
-Listing – A unified listing/item structure (title, price, description, images)
+•Listing – A unified listing/item structure (title, price, description, images)
 
 Scoring System
 
-AbstractScorer – Enforced interface for all scoring algorithms
+•AbstractScorer – Enforced interface for all scoring algorithms
 
-QualityScorer – Full quality scoring based on:
+•QualityScorer – Full quality scoring based on:
 
-Title
+•Title
 
-Price
+•Price
 
-Description length
+•Description length
 
-Image count
-
-Clean, modular, easy to extend.
+•Image count
 
 ✅ SQLite Database
 
-Automatic table creation on startup
+•Automatic table creation on startup
 
-Safe inserts using dictionary parameter binding
+•Safe inserts using dictionary parameter binding
 
-Saves full listing info:
+•Saves full listing info:
 
-title
+•title
 
-price
+•price
 
-description
+•description
 
-images
+•images
 
-score
+•score
 
-missing fields
+•missing fields
 
 ✅ Tkinter GUI
 
-URL input field
+•URL input field
 
-“Let’s Go” scrape button
+•“Let’s Go” scrape button
 
-TreeView listing table
+•TreeView listing table
 
-Red log output panel
+•Red log output panel
 
-Background scraping using a worker thread
+•Background scraping using a worker thread
 
-Completely responsive GUI (no freezing)
+•Completely responsive GUI (no freezing)
 
 🧱 Project Architecture Overview
 
@@ -88,17 +87,17 @@ Completely responsive GUI (no freezing)
 
 Main Components
 
-BaseModel → shared base
+•BaseModel → shared base
 
-Listing → data structure
+•Listing → data structure
 
-AbstractScorer → scoring interface
+•AbstractScorer → scoring interface
 
-QualityScorer → weighted scoring rules
+•QualityScorer → weighted scoring rules
 
-Database → SQLite persistence
+•Database → SQLite persistence
 
-App → Tkinter GUI controller
+•App → Tkinter GUI controller
 
 📊 Quality Scoring Logic
 
@@ -125,84 +124,83 @@ Enter a URL → click Let’s Go → results instantly appear.
 
 🌐 Scraping Workflow
 
-ChromeDriver installs automatically
+1)ChromeDriver installs automatically
 
-Selenium loads the webpage
+2)Selenium loads the webpage
 
-BeautifulSoup parses the page source
+3)BeautifulSoup parses the page source
 
-First 10 product cards are detected
+4)First 10 product cards are detected
 
-Each item becomes a Listing object
+5)Each item becomes a Listing object
 
-Items are scored using QualityScorer
+6)Items are scored using QualityScorer
 
-Results are:
+7)Results are:
 
-Saved to SQLite (listings.db)
-
-Displayed in the GUI table
+  •Saved to SQLite (listings.db)
+  •Displayed in the GUI table
 
 🖥️ How to Use the GUI
 
-Enter any URL (default: books.toscrape.com)
+1)Enter any URL (default: books.toscrape.com)
 
-Click Let’s Go
+2)Click Let’s Go
 
-Scraper fetches & evaluates the first 10 products
+3)Scraper fetches & evaluates the first 10 products
 
-The table displays:
+4)The table displays:
 
-Title
+   •Title
+   •Price
+   •Image count
+   •Score
 
-Price
-
-Image count
-
-Score
-
-Errors and logs appear in the red status area
+5)Errors and logs appear in the red status area
 
 🔐 Robustness & Safety Features
 
-Driver startup protected with try/except
+•Driver startup protected with try/except
 
-URL validation
+•URL validation
 
-Page load retry (up to 3 attempts)
+•Page load retry (up to 3 attempts)
 
-Safe DB insertion with parameter binding
+•Safe DB insertion with parameter binding
 
-Thread-safe GUI updating (root.after)
+•Thread-safe GUI updating (root.after)
 
-Logging of every important event into scraper.log
+•Logging of every important event into scraper.log
 
-Graceful error handling → no crashes
+•Graceful error handling → no crashes
 
 📦 Technologies Used
 
-Python 3.10+
+•Python 3.10+
 
-Selenium WebDriver
+•Selenium WebDriver
 
-BeautifulSoup4
+•BeautifulSoup4
 
-Tkinter GUI
+•Tkinter GUI
 
-SQLite3
+•SQLite3
 
-Webdriver Manager
+•Webdriver Manager
 
-Threading
+•Threading
 
-OOP architecture
+•OOP architecture
 
 🧪 Tested On
 
-Windows 11
+•Windows 11
 
-Google Chrome (latest)
+•Google Chrome (latest)
 
-Python 3.10 / Python 3.11
+•Python 3.10 / Python 3.11
 
 🎥 Demo
+
+
+
