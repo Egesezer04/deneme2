@@ -53,14 +53,13 @@ Bu proje Selenium + BeautifulSoup + SQLite + OOP + Tkinter + Threading ile tam b
 
 ## 🧱 Project Architecture Overview
 
-/ project
-│── app.py        # Main Tkinter GUI application
-│── models.py     # BaseModel & Listing
-│── scorer.py     # Scoring interface + QualityScorer
-│── scraper.py    # Selenium + BeautifulSoup scraper logic
-│── database.py   # SQLite operations
-│── README.md     # This file
-
+/project
+│── app.py # Main Tkinter GUI application
+│── models.py # BaseModel & Listing
+│── scorer.py # Scoring interface + QualityScorer
+│── scraper.py # Selenium + BeautifulSoup scraper logic
+│── database.py # SQLite operations
+│── README.md # This file
 
 **Main Components**
 
