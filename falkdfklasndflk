@@ -1,0 +1,291 @@
+import sqlite3
+import threading
+import tkinter as tk
+from tkinter import ttk
+from abc import ABC, abstractmethod
+from typing import List, Dict
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+import logging
+
+# ------------------------------
+# Logging setup
+# ------------------------------
+logging.basicConfig(filename='scraper.log', level=logging.INFO,
+                    format='%(asctime)s [%(levelname)s]: %(message)s')
+
+
+# ------------------------------
+# MODELS
+# ------------------------------
+class BaseModel:
+    """Base class with unique ID."""
+    def __init__(self):
+        self.id = None
+
+
+class Listing(BaseModel):
+    """Represents a product/listing."""
+    def __init__(self, title: str, price: float = 0, description: str = "", images: List[str] = None):
+        super().__init__()
+        self.title = title or "No title"
+        self.price = price or 0
+        self.description = description or "No description"
+        self.images = images or []
+
+    def summary(self, detailed: bool = False) -> str:
+        """Return a summary string of the listing."""
+        if detailed:
+            return f"Title: {self.title}, Price: {self.price}, Description: {self.description}, Images: {len(self.images)}"
+        return f"Title: {self.title}, Price: {self.price}, Images: {len(self.images)}"
+
+
+# ------------------------------
+# SCORER
+# ------------------------------
+class AbstractScorer(ABC):
+    """Interface for scoring a listing."""
+    @abstractmethod
+    def score(self, listing: Listing):
+        pass
+
+
+class QualityScorer(AbstractScorer):
+    """Implements scoring rules for listings."""
+    def score(self, listing: Listing) -> (float, List[str]):
+        points = 0
+        missing: List[str] = []
+
+        points += self._score_title(listing.title, missing)
+        points += self._score_price(listing.price, missing)
+        points += self._score_description(listing.description, missing)
+        points += self._score_images(len(listing.images), missing)
+
+        return max(0, min(100, points)), missing
+
+    @staticmethod
+    def _score_title(title: str, missing: List[str]) -> int:
+        if title:
+            return 10
+        missing.append("Title missing")
+        return 0
+
+    @staticmethod
+    def _score_price(price: float, missing: List[str]) -> int:
+        if price is None:
+            missing.append("Price missing")
+            return 0
+        if price < 10:
+            missing.append("Price may be low")
+        return 20
+
+    @staticmethod
+    def _score_description(description: str, missing: List[str]) -> int:
+        length = len(description)
+        if length >= 100:
+            return 20
+        if length >= 20:
+            return 10
+        missing.append("Description too short")
+        return 0
+
+    @staticmethod
+    def _score_images(count: int, missing: List[str]) -> int:
+        if count >= 3:
+            return 20
+        if count >= 1:
+            return 10
+        missing.append("No images")
+        return 0
+
+
+# ------------------------------
+# DATABASE
+# ------------------------------
+class Database(BaseModel):
+    """Handles SQLite operations."""
+    def __init__(self, sqlite_db: str = "listings.db"):
+        super().__init__()
+        self.sqlite_db = sqlite_db
+        self._connect_db()
+
+    def _connect_db(self):
+        try:
+            self.conn = sqlite3.connect(self.sqlite_db, check_same_thread=False)
+            self.cursor = self.conn.cursor()
+            self._create_table()
+        except sqlite3.Error as e:
+            logging.error(f"DB CONNECTION ERROR: {e}")
+            self.conn = None
+            self.cursor = None
+
+    def _create_table(self):
+        if not self.cursor:
+            return
+        try:
+            self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS listings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                price REAL,
+                description TEXT,
+                images TEXT,
+                score REAL,
+                missing TEXT
+            )
+            """)
+            self.conn.commit()
+        except sqlite3.Error as e:
+            logging.error(f"DB TABLE ERROR: {e}")
+
+    def add(self, data: Dict):
+        if not self.conn:
+            logging.error("DB not connected, cannot insert data.")
+            return
+        try:
+            self.cursor.execute("""
+            INSERT INTO listings (title, price, description, images, score, missing)
+            VALUES (:title, :price, :description, :images, :score, :missing)
+            """, data)
+            self.conn.commit()
+            logging.info(f"Listing saved: {data['title']}")
+        except sqlite3.Error as e:
+            logging.error(f"DB INSERT ERROR: {e}, Data: {data}")
+
+
+# ------------------------------
+# APP / GUI
+# ------------------------------
+class App:
+    """Main Tkinter app."""
+    def __init__(self, root):
+        self.root = root
+        root.title("Books to Scrape Scraper")
+
+        self.url_entry = tk.Entry(root, width=60)
+        self.url_entry.insert(0, "http://books.toscrape.com/")
+        self.url_entry.pack()
+
+        self.btn_scrape = tk.Button(root, text="Lets Go", command=self.start_scraping)
+        self.btn_scrape.pack(pady=5)
+
+        self.tree = ttk.Treeview(root, columns=("Title", "Price", "Images", "Score"), show="headings", height=12)
+        for col in ("Title", "Price", "Images", "Score"):
+            self.tree.heading(col, text=col)
+        self.tree.pack()
+
+        self.log = tk.Label(root, text="", fg="red")
+        self.log.pack(pady=5)
+
+    def start_scraping(self):
+        threading.Thread(target=self._scrape_thread, daemon=True).start()
+
+    def _scrape_thread(self):
+        """Scrape URL and update GUI/DB safely."""
+        try:
+            options = Options()
+            options.add_argument("--headless")
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        except Exception as e:
+            self.safe_log(f"Driver Error: {e}")
+            logging.error(f"Driver Error: {e}")
+            return
+
+        url = self.url_entry.get().strip()
+        if not url.startswith(("http://", "https://")):
+            self.safe_log("Invalid URL")
+            return
+
+        # Retry mechanism
+        for attempt in range(3):
+            try:
+                driver.get(url)
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_all_elements_located((By.CSS_SELECTOR, "article.product_pod"))
+                )
+                break
+            except Exception as e:
+                if attempt == 2:
+                    self.safe_log(f"Page Load failed after 3 attempts: {e}")
+                    logging.error(f"Page Load failed: {e}")
+                    driver.quit()
+                    return
+                time.sleep(1)
+
+        html = driver.page_source
+        driver.quit()
+
+        # Parsing
+        try:
+            soup = BeautifulSoup(html, "html.parser")
+            cards = soup.select("article.product_pod")[:10]
+        except Exception as e:
+            self.safe_log(f"Parsing Error: {e}")
+            logging.error(f"Parsing Error: {e}")
+            return
+
+        listings = []
+        for card in cards:
+            try:
+                title_tag = card.select_one("h3 a")
+                title = title_tag.get("title", "No title") if title_tag else "No title"
+
+                price_tag = card.select_one(".price_color")
+                try:
+                    price = float(price_tag.get_text().replace("£", "").strip()) if price_tag else 0
+                except (ValueError, AttributeError):
+                    price = 0
+
+                img_tag = card.select_one("img")
+                images = [img_tag["src"]] if img_tag and img_tag.has_attr("src") else []
+
+                listings.append(Listing(title, price, description="BooksToScrape", images=images))
+            except Exception as e:
+                logging.error(f"Skipping card due to parsing error: {e}")
+                continue
+
+        db = Database()
+        scorer = QualityScorer()
+
+        # Clear treeview safely
+        self.root.after(0, lambda: [self.tree.delete(row) for row in self.tree.get_children()])
+
+        for listing in listings:
+            try:
+                points, missing = scorer.score(listing)
+                db.add({
+                    "title": listing.title,
+                    "price": listing.price,
+                    "description": listing.description,
+                    "images": ",".join(listing.images),
+                    "score": points,
+                    "missing": "; ".join(missing)
+                })
+                try:
+                    self.root.after(0, lambda l=listing, p=points:
+                                    self.tree.insert("", "end", values=(l.title, l.price, len(l.images), p)))
+                except Exception as e:
+                    logging.error(f"GUI update error: {e}")
+            except Exception as e:
+                logging.error(f"Error inserting listing: {e}")
+
+        self.safe_log(f"{len(listings)} listings found and saved.")
+
+    def safe_log(self, text: str):
+        """Update GUI log safely and log to file."""
+        self.root.after(0, lambda: self.log.config(text=text))
+        logging.info(text)
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = App(root)
+    root.mainloop()
+
