@@ -7,7 +7,6 @@ Bu proje Selenium + BeautifulSoup + SQLite + OOP + Tkinter + Threading ile tam b
 ## 🚀 Features
 
 ### ✅ Web Scraping
-
 - Dynamic page loading using Selenium WebDriver  
 - HTML extraction through BeautifulSoup  
 - Automatically parses the first 10 product listings  
@@ -22,7 +21,6 @@ Bu proje Selenium + BeautifulSoup + SQLite + OOP + Tkinter + Threading ile tam b
 - Listing – A unified listing/item structure (title, price, description, images)  
 
 **Scoring System**
-
 - AbstractScorer – Enforced interface for all scoring algorithms  
 - QualityScorer – Full quality scoring based on:  
   - Title  
@@ -31,7 +29,6 @@ Bu proje Selenium + BeautifulSoup + SQLite + OOP + Tkinter + Threading ile tam b
   - Image count  
 
 ### ✅ SQLite Database
-
 - Automatic table creation on startup  
 - Safe inserts using dictionary parameter binding  
 - Saves full listing info:  
@@ -43,7 +40,6 @@ Bu proje Selenium + BeautifulSoup + SQLite + OOP + Tkinter + Threading ile tam b
   - missing fields  
 
 ### ✅ Tkinter GUI
-
 - URL input field  
 - “Let’s Go” scrape button  
 - TreeView listing table  
@@ -53,6 +49,7 @@ Bu proje Selenium + BeautifulSoup + SQLite + OOP + Tkinter + Threading ile tam b
 
 ## 🏗️ Project Architecture Overview
 
+```text
 /project
 │── app.py        # Main Tkinter App
 │── scraper.py    # Selenium + BS4 logic
@@ -60,7 +57,6 @@ Bu proje Selenium + BeautifulSoup + SQLite + OOP + Tkinter + Threading ile tam b
 │── scorer.py     # AbstractScorer & QualityScorer
 │── database.py   # SQLite handler
 │── README.md     # This file
-
 
 **Main Components**
 
