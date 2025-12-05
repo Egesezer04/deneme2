@@ -50,7 +50,7 @@ def fetch_listings(url: str, limit: int = 10) -> list:
             title = title_tag.get("title", "No title") if title_tag else "No title"
 
             price_tag = card.select_one(".price_color")
-            # Güvenli float dönüşümü
+            # Secure float information
             try:
                 price_text = price_tag.get_text().replace("£", "").strip() if price_tag else "0"
                 price = float(price_text)
