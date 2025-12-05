@@ -1,15 +1,15 @@
-2025-12-04 22:41:38,184 [INFO]: ====== WebDriver manager ======
-2025-12-04 22:41:39,220 [INFO]: Get LATEST chromedriver version for google-chrome
-2025-12-04 22:41:39,508 [INFO]: Get LATEST chromedriver version for google-chrome
-2025-12-04 22:41:39,796 [INFO]: Driver [C:\Users\asus\.wdm\drivers\chromedriver\win64\142.0.7444.175\chromedriver-win32/chromedriver.exe] found in cache
-2025-12-04 22:41:46,726 [INFO]: Listing saved: A Light in the Attic
-2025-12-04 22:41:46,728 [INFO]: Listing saved: Tipping the Velvet
-2025-12-04 22:41:46,730 [INFO]: Listing saved: Soumission
-2025-12-04 22:41:46,733 [INFO]: Listing saved: Sharp Objects
-2025-12-04 22:41:46,735 [INFO]: Listing saved: Sapiens: A Brief History of Humankind
-2025-12-04 22:41:46,737 [INFO]: Listing saved: The Requiem Red
-2025-12-04 22:41:46,741 [INFO]: Listing saved: The Dirty Little Secrets of Getting Your Dream Job
-2025-12-04 22:41:46,744 [INFO]: Listing saved: The Coming Woman: A Novel Based on the Life of the Infamous Feminist, Victoria Woodhull
-2025-12-04 22:41:46,746 [INFO]: Listing saved: The Boys in the Boat: Nine Americans and Their Epic Quest for Gold at the 1936 Berlin Olympics
-2025-12-04 22:41:46,751 [INFO]: Listing saved: The Black Maria
-2025-12-04 22:41:46,756 [INFO]: 10 listings found and saved.
+2025-12-05 13:55:24,743 [INFO]: ====== WebDriver manager ======
+2025-12-05 13:55:26,795 [INFO]: Get LATEST chromedriver version for google-chrome
+2025-12-05 13:55:27,103 [INFO]: Get LATEST chromedriver version for google-chrome
+2025-12-05 13:55:27,390 [INFO]: Driver [C:\Users\asus\.wdm\drivers\chromedriver\win64\142.0.7444.175\chromedriver-win32/chromedriver.exe] found in cache
+2025-12-05 13:55:35,050 [INFO]: Listing saved: A Light in the Attic
+2025-12-05 13:55:35,052 [INFO]: Listing saved: Tipping the Velvet
+2025-12-05 13:55:35,054 [INFO]: Listing saved: Soumission
+2025-12-05 13:55:35,056 [INFO]: Listing saved: Sharp Objects
+2025-12-05 13:55:35,058 [INFO]: Listing saved: Sapiens: A Brief History of Humankind
+2025-12-05 13:55:35,060 [INFO]: Listing saved: The Requiem Red
+2025-12-05 13:55:35,063 [INFO]: Listing saved: The Dirty Little Secrets of Getting Your Dream Job
+2025-12-05 13:55:35,066 [INFO]: Listing saved: The Coming Woman: A Novel Based on the Life of the Infamous Feminist, Victoria Woodhull
+2025-12-05 13:55:35,068 [INFO]: Listing saved: The Boys in the Boat: Nine Americans and Their Epic Quest for Gold at the 1936 Berlin Olympics
+2025-12-05 13:55:35,073 [INFO]: Listing saved: The Black Maria
+2025-12-05 13:55:35,076 [INFO]: 10 listings found and saved.
